@@ -22,8 +22,7 @@ LABELS = open(labelsPath).read().strip().split("\n")
 
 # initialize a list of colors to represent each possible class label
 np.random.seed(42)
-COLORS = np.random.randint(0, 255, size=(len(LABELS), 3),
-                           dtype="uint8")
+COLORS = np.random.randint(0, 255, size=(len(LABELS), 3), dtype="uint8")
 
 # derive the paths to the YOLO weights and model configuration
 weightsPath = os.path.sep.join([args["yolo"], "yolov3.weights"])
@@ -44,8 +43,7 @@ ln = [ln[i[0] - 1] for i in net.getUnconnectedOutLayers()]
 # construct a blob from the input image and then perform a forward
 # pass of the YOLO object detector, giving us our bounding boxes and
 # associated probabilities
-blob = cv2.dnn.blobFromImage(image, 1 / 255.0, (416, 416),
-                             swapRB=True, crop=False)
+blob = cv2.dnn.blobFromImage(image, 1 / 255.0, (416, 416), swapRB=True, crop=False)
 net.setInput(blob)
 start = time.time()
 layerOutputs = net.forward(ln)
@@ -93,8 +91,7 @@ for output in layerOutputs:
 
 # apply non-maxima suppression to suppress weak, overlapping bounding
 # boxes
-idxs = cv2.dnn.NMSBoxes(boxes, confidences, args["confidence"],
-                        args["threshold"])
+idxs = cv2.dnn.NMSBoxes(boxes, confidences, args["confidence"], args["threshold"])
 
 # ensure at least one detection exists
 if len(idxs) > 0:
@@ -108,8 +105,7 @@ if len(idxs) > 0:
         color = [int(c) for c in COLORS[classIDs[i]]]
         cv2.rectangle(image, (x, y), (x + w, y + h), color, 2)
         text = "{}: {:.4f}".format(LABELS[classIDs[i]], confidences[i])
-        cv2.putText(image, text, (x, y - 5), cv2.FONT_HERSHEY_SIMPLEX,
-                    0.5, color, 2)
+        cv2.putText(image, text, (x, y - 5), cv2.FONT_HERSHEY_SIMPLEX, 0.5, color, 2)
 
 # show the output image
 cv2.imshow("Image", image)
